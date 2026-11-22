@@ -1,0 +1,76 @@
+#include <stdio.h>
+
+int isLeapYear(int year)
+{
+    if (year % 400 == 0)
+        return 1;
+    else if (year % 100 == 0)
+        return 0;
+    else if (year % 4 == 0)
+        return 1;
+    else
+        return 0;
+}
+
+int getDay(int date, int month, int year)
+{
+    static int t[] = {0, 3, 2, 5, 0, 3, 5, 1, 4, 6, 2, 4};
+
+    if (month < 3)
+        year--;
+
+    return (year + year / 4 - year / 100 + year / 400 +
+            t[month - 1] + date) % 7;
+}
+
+int main()
+{
+    int year, month, day, days, i, j;
+    char *months[] = {
+        "January", "February", "March", "April",
+        "May", "June", "July", "August",
+        "September", "October", "November", "December"
+    };
+
+    int monthDays[] = {
+        31, 28, 31, 30, 31, 30,
+        31, 31, 30, 31, 30, 31
+    };
+
+    printf("Enter year: ");
+    scanf("%d", &year);
+
+    if (year < 1)
+    {
+        printf("Invalid year");
+        return 0;
+    }
+
+    if (isLeapYear(year))
+        monthDays[1] = 29;
+
+    for (month = 1; month <= 12; month++)
+    {
+        printf("\n\n       %s %d\n", months[month - 1], year);
+        printf("Sun Mon Tue Wed Thu Fri Sat\n");
+
+        day = getDay(1, month, year);
+
+        for (i = 0; i < day; i++)
+            printf("    ");
+
+        days = monthDays[month - 1];
+
+        for (j = 1; j <= days; j++)
+        {
+            printf("%3d ", j);
+
+            if ((j + day) % 7 == 0)
+                printf("\n");
+        }
+
+        printf("\n");
+    }
+
+    return 0;
+}
